@@ -7,6 +7,7 @@ import (
 	"unicode"
 )
 
+// UnpackingString осуществляет примитивную распаковку строки, содержащую повторяющиеся символы
 func UnpackingString(input string) (string, error) {
 	if input == "" {
 		return "", nil

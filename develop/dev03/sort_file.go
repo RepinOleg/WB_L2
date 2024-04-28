@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-type Flags struct {
+type flags struct {
 	column      int
 	numeric     bool
 	reverse     bool
@@ -20,7 +20,7 @@ type Flags struct {
 	ignoreSpace bool
 }
 
-var f Flags
+var f flags
 
 func init() {
 	flag.IntVar(&f.column, "k", 0, "указание колонки для сортировки")
@@ -39,34 +39,34 @@ func main() {
 	}
 
 	if f.sorted {
-		res, ok := IsSorted(lines)
+		res, ok := isSorted(lines)
 		if !ok {
 			fmt.Println("disorder: " + res)
 		}
 		return
 	}
 
-	sort.Slice(lines, CompareLines(lines))
+	sort.Slice(lines, compareLines(lines))
 
 	if f.unique {
-		lines = UniqueLines(lines)
+		lines = uniqueLines(lines)
 	}
 	printLines(lines)
 }
 
-func UniqueLines(lines []string) []string {
-	uniqueLines := []string{lines[0]}
+func uniqueLines(lines []string) []string {
+	uniqueLine := []string{lines[0]}
 
 	mp := make(map[string]bool, len(lines))
 	mp[lines[0]] = true
 
 	for i := 1; i < len(lines); i++ {
 		if !mp[lines[i]] {
-			uniqueLines = append(uniqueLines, lines[i])
+			uniqueLine = append(uniqueLine, lines[i])
 			mp[lines[i]] = true
 		}
 	}
-	return uniqueLines
+	return uniqueLine
 }
 
 func readFile(filename string) ([]string, error) {
@@ -88,16 +88,16 @@ func readFile(filename string) ([]string, error) {
 	return lines, nil
 }
 
-func IsSorted(lines []string) (string, bool) {
+func isSorted(lines []string) (string, bool) {
 	for i := 1; i < len(lines); i++ {
-		if CompareLines(lines)(i, i-1) {
+		if compareLines(lines)(i, i-1) {
 			return lines[i], false
 		}
 	}
 	return "", true
 }
 
-func CompareLines(lines []string) func(i, j int) bool {
+func compareLines(lines []string) func(i, j int) bool {
 	return func(i, j int) bool {
 		a, b := lines[i], lines[j]
 

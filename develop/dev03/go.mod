@@ -1,4 +1,4 @@
-module my_sort
+module sort
 
 go 1.22.0
 
