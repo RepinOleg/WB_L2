@@ -9,6 +9,11 @@ import (
 	"strings"
 )
 
+/*
+Реализовать утилиту wget с возможностью скачивать сайты целиком.
+
+*/
+
 func main() {
 	if len(os.Args) != 2 {
 		fmt.Fprintln(os.Stderr, "wrong input: use\t wget \"link to website\"")
