@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// Event contains information about the event
 type Event struct {
 	ID     int       `json:"id"`
 	Title  string    `json:"title"`
@@ -17,6 +18,7 @@ type Event struct {
 	UserID int       `json:"user_id"`
 }
 
+// Calendar it's map with pointers to Events
 type Calendar struct {
 	Events map[int][]*Event
 }
@@ -75,7 +77,7 @@ func (c *Calendar) Create(ev *Event) error {
 	return nil
 }
 
-// Update обновление информации о событии в календаре
+// Update information about event
 func (c *Calendar) Update(ev *Event) error {
 	if _, ok := c.Events[ev.UserID]; !ok {
 		return fmt.Errorf("user with ID = %v doesn't exist", ev.UserID)
@@ -92,6 +94,7 @@ func (c *Calendar) Update(ev *Event) error {
 	return fmt.Errorf("event with ID %v not found (user %v)", ev.ID, ev.UserID)
 }
 
+// Delete information about event from calendar
 func (c *Calendar) Delete(ev *Event) error {
 	if _, ok := c.Events[ev.UserID]; !ok {
 		return fmt.Errorf("user %v doesn't exist", ev.UserID)
@@ -109,6 +112,7 @@ func (c *Calendar) Delete(ev *Event) error {
 	return fmt.Errorf("can't find event with %v id for %v user id", ev.ID, ev.UserID)
 }
 
+// Response send json with data
 func Response(w http.ResponseWriter, r any, status int) {
 	resp := struct {
 		Result any `json:"result"`
@@ -125,6 +129,7 @@ func Response(w http.ResponseWriter, r any, status int) {
 	w.Write(res)
 }
 
+// ErrorResponse send json with error
 func ErrorResponse(w http.ResponseWriter, e string, status int) {
 	errResp := struct {
 		Error string `json:"error"`
@@ -335,7 +340,7 @@ func main() {
 	mux.HandleFunc("/delete_event", deleteEventHandler)
 
 	wMux := newLogger(mux)
-
+	log.Println("Service started on port 8080")
 	log.Fatalln(http.ListenAndServe(":8080", wMux))
 
 }
